@@ -1,14 +1,17 @@
-#from alpine:latest
+from alpine:latest
 
-#RUN apk add mariadb mariadb-client
+RUN apk update && \
+	apk add mysql mysql-client && \
+	addgroup mysql mysql && \
+	rm -rf /var/cache/apk/*
 
-#RUN DB_DATA_PATH="/var/lib/mysql"
-#RUN DB_ROOT_PASS="mariadb_root_password"
-#RUN DB_USER="mariadb_user"
-#RUN DB_PASS="mariadb_user_password"
-#RUN MAX_ALLOWED_PACKET="200M"
+COPY /start.sh /start.sh
+COPY my.cnf /etc/mysql/my.cnf
 
-#RUN mysql_install_db --user=mysql --datadir="/var/lib/mysql"
+RUN chmod 777 /start.sh
 
-#RUN mariadb start
-#RUN mysqladmin -u root password "${DB_ROOT_PASS}"
+VOLUME ["/var/lib/mysql"]
+
+EXPOSE 3306
+
+ENTRYPOINT ["sh", "/start.sh"]
