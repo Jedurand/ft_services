@@ -11,12 +11,14 @@ docker build -t my-nginx srcs/nginx
 
 docker build -t my-mysql srcs/mysql
 docker build -t my-wordpress srcs/wordpress
+docker build -t my-ftps srcs/myftps
 
 kubectl apply -f ./srcs/yaml/nginx.yaml
 #kubectl apply -f ./srcs/yaml/php.yaml
 kubectl apply -f ./srcs/yaml/wordpress.yaml
 kubectl apply -f ./srcs/yaml/mysql.yaml
 kubectl apply -f ./srcs/yaml/phpmyadmin.yaml
+kubectl apply -f ./srcs/yaml/ftps.yaml
 kubectl apply -f ./srcs/yaml/ingress.yaml > /dev/null
 
 
