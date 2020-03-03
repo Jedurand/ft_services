@@ -28,6 +28,7 @@ COPY ./index.html /www/index.html
 RUN nginx -t
 
 EXPOSE 80
+EXPOSE 443
 
 # pour faire tourner en fond
 CMD ["nginx", "-g", "daemon off;"]
