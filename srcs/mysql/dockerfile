@@ -5,13 +5,15 @@ RUN apk update && \
 	addgroup mysql mysql && \
 	rm -rf /var/cache/apk/*
 
-COPY /start.sh /start.sh
+COPY /start.sh /bin/start.sh
 COPY my.cnf /etc/mysql/my.cnf
 
-RUN chmod 777 /start.sh
+RUN chmod 777 /bin/start.sh
 
 VOLUME ["/var/lib/mysql"]
 
 EXPOSE 3306
 
-ENTRYPOINT ["sh", "/start.sh"]
+#RUN sh /bin/start.sh
+
+ENTRYPOINT ["/bin/start.sh"]
