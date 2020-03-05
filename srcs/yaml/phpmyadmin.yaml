@@ -3,12 +3,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: phpmyadmin
+  labels:
+     apps: phpmyadmin
 spec:
   ports:
     - port: 80
       nodePort: 30002
   selector:
     app: phpmyadmin
+    tier: mysql
   type: NodePort
 ---
 apiVersion: apps/v1
@@ -29,7 +32,8 @@ spec:
     spec:
       containers:
         - name: phpmyadmin
-          image: etopian/phpmyadmin
+          image: my-php
+          imagePullPolicy: Never
           ports:
             - containerPort: 80
               hostPort: 5000

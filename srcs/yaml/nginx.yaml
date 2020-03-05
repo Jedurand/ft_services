@@ -36,8 +36,10 @@ spec:
         ports:
         - containerPort: 80
           name: http
+          hostPort: 80
         - containerPort: 443
           name: https
+          hostPort: 443
         imagePullPolicy: Never
 ---
 apiVersion: extensions/v1beta1

@@ -1,19 +1,15 @@
-from alpine:latest
+FROM alpine:latest
 
-RUN apk update && \
-	apk add mysql mysql-client && \
-	addgroup mysql mysql && \
-	rm -rf /var/cache/apk/*
+WORKDIR /app
+VOLUME /app
 
-COPY /start.sh /bin/start.sh
+#RUN chmod 777 /startup.h
+
+COPY startup.sh /startup.sh
+RUN chmod +x /startup.sh
+
+RUN apk add --update mysql mysql-client && rm -f /var/cache/apk/*
 COPY my.cnf /etc/mysql/my.cnf
 
-RUN chmod 777 /bin/start.sh
-
-VOLUME ["/var/lib/mysql"]
-
 EXPOSE 3306
-
-#RUN sh /bin/start.sh
-
-ENTRYPOINT ["/bin/start.sh"]
+ENTRYPOINT ["/startup.sh"]
