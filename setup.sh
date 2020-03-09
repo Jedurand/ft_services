@@ -1,8 +1,8 @@
 eval $(minikube docker-env)
 #
-# minikube start --extra-config=apiserver.ServerRunOptions.ServiceNodePortRange=1-30000
+# minikube start --extra-config=apiserver.ServerRunOptions.ServiceNodePortRange=1-35000
 # --vm-driver=none
-# minikube start --v=7 --cpus 4 --vm-driver=virtualbox --extra-config=apiserver.ServerRunOptions.ServiceNodePortRange=1-30000
+# minikube start --v=7 --cpus 4 --vm-driver=virtualbox --extra-config=apiserver.ServerRunOptions.ServiceNodePortRange=1-35000
 
 export MINIKUBE_IP=$(minikube ip)
 echo $(minikube ip)

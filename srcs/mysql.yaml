@@ -8,10 +8,7 @@ spec:
   ports:
     - port: 3306
   selector:
-    app: wordpress
-    tier: mysql
-    app: phpmyadmin
-    tier: mysql
+    app: mysql
   clusterIP: None
 ---
 apiVersion: v1
@@ -47,7 +44,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - image: my-mysql
+      - image: mysql_alpine
         imagePullPolicy: Never
         name: mysql
         env:
