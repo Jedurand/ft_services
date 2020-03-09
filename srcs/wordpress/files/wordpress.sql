@@ -469,9 +469,9 @@ CREATE TABLE `wp_users` (
 --
 
 INSERT INTO `wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES
-(1, 'richard', 'admin', 'richard', 'richard_gere@gmail.com', '', '2020-01-21 11:04:10', '', 0, 'richard'),
-(2, 'user1', '$P$BTErdp2bKoOyn2qhkOP1t9tAzFp7ik1', 'user1', 'user1@gmail.com', '', '2020-01-21 11:05:23', '', 0, 'user1'),
-(3, 'user2', '$P$BVkkzh/56r9D2RYivixxo7LI.0qNR50', 'user2', 'user2@gmail.com', '', '2020-01-21 11:05:40', '', 0, 'user2');
+(1, 'richard', '21232f297a57a5a743894a0e4a801fc3', 'richard', 'richard_gere@gmail.com', '', '2020-01-21 11:04:10', '', 0, 'richard'),
+(2, 'user1', '21232f297a57a5a743894a0e4a801fc3', 'user1', 'user1@gmail.com', '', '2020-01-21 11:05:23', '', 0, 'user1'),
+(3, 'user2', '21232f297a57a5a743894a0e4a801fc3', 'user2', 'user2@gmail.com', '', '2020-01-21 11:05:40', '', 0, 'user2');
 
 --
 -- Indexes for dumped tables
