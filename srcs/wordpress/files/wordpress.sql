@@ -398,7 +398,7 @@ CREATE TABLE `wp_usermeta` (
 --
 
 INSERT INTO `wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES
-(1, 1, 'nickname', 'richard_gere'),
+(1, 1, 'nickname', 'admin'),
 (2, 1, 'first_name', ''),
 (3, 1, 'last_name', ''),
 (4, 1, 'description', ''),
@@ -469,7 +469,7 @@ CREATE TABLE `wp_users` (
 --
 
 INSERT INTO `wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES
-(1, 'richard', '21232f297a57a5a743894a0e4a801fc3', 'richard', 'richard_gere@gmail.com', '', '2020-01-21 11:04:10', '', 0, 'richard'),
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', 'richard_gere@gmail.com', '', '2020-01-21 11:04:10', '', 0, 'admin'),
 (2, 'user1', '21232f297a57a5a743894a0e4a801fc3', 'user1', 'user1@gmail.com', '', '2020-01-21 11:05:23', '', 0, 'user1'),
 (3, 'user2', '21232f297a57a5a743894a0e4a801fc3', 'user2', 'user2@gmail.com', '', '2020-01-21 11:05:40', '', 0, 'user2');
 

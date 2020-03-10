@@ -29,7 +29,8 @@ spec:
     spec:
       containers:
         - name: phpmyadmin
-          image: etopian/phpmyadmin
+          image: phpmyadmin
+          imagePullPolicy: Never
           ports:
             - containerPort: 80
           env:
