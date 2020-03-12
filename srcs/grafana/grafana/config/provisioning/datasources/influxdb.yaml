@@ -12,7 +12,7 @@ datasources:
   editable: false
   basicAuth: true
   basicAuthUser: admin
-  basicAuthPassword: kraken
+  basicAuthPassword: admin
 - name: Gatling
   orgId: 1
   type: influxdb
@@ -24,4 +24,4 @@ datasources:
   editable: false
   basicAuth: true
   basicAuthUser: user
-  basicAuthPassword: kraken
+  basicAuthPassword: user
