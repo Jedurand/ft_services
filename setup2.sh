@@ -9,7 +9,7 @@ function apply_yaml()
 	printf "✓	$@ deployed!\n"
 }
 
-SERVICE_LIST="mysql phpmyadmin nginx wordpress influxdb telegraf ftps"
+SERVICE_LIST="mysql phpmyadmin nginx wordpress influxdb telegraf grafana"
 
 if [[ $1 = 'clean' ]]
 then
@@ -32,6 +32,7 @@ then
 fi
 
 MINIKUBE_IP=$(minikube ip)
+WORK_DIR=$(pwd)
 
 # Set the docker images in Minikube
 
@@ -49,6 +50,8 @@ docker build -t phpmyadmin srcs/phpmyadmin
 docker build -t ftps_alpine srcs/ftps
 #docker build -t grafana_alpine srcs/grafana
 
+#minikube mount $WORK_DIR/srcs/grafana/grafana/config:/grafana
+
 for SERVICE in $SERVICE_LIST
 do
 	apply_yaml $SERVICE
@@ -59,5 +62,5 @@ kubectl apply -f srcs/ingress.yaml > /dev/null
 kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql -u root -e 'CREATE DATABASE wordpress;'
 kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql wordpress -u root < srcs/wordpress/files/wordpress-tmp.sql
 
-#rm -rf srcs/ftps/scripts/start-tmp.sh
+rm -rf srcs/ftps/scripts/start-tmp.sh
 rm -rf srcs/wordpress/files/wordpress-tmp.sql
