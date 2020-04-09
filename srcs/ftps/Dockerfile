@@ -1,14 +1,18 @@
-FROM alpine:3.7
-RUN apk --no-cache add vsftpd
-RUN touch /var/log/vsftpd.log
+FROM alpine:latest
 
-COPY scripts/start-tmp.sh /bin/start_vsftpd.sh
-COPY files/vsftpd.conf /etc/vsftpd/vsftpd.conf
+RUN apk upgrade && \
+    printf '%s\n' \
+      '@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
+      >> /etc/apk/repositories && \
+    apk update && \
+	apk add openssl && \
+    apk add --no-cache pure-ftpd@testing="1.0.49-r1" && \
+    rm -rf /var/cache/apk/*
 
-#cp srcs/ftps/scripts/start.sh srcs/ftps/scripts/start-tmp.sh
-#sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/ftps/scripts/start-tmp.sh
+COPY ./scripts/start.sh .
 
-EXPOSE 21 21000-21010
-VOLUME /ftp/ftp
+RUN chmod +x start.sh
 
-CMD "/bin/start_vsftpd.sh"
+EXPOSE 21 21000
+
+CMD ./start.sh

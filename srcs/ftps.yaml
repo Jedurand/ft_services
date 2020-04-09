@@ -6,14 +6,15 @@ metadata:
     app: ftps
 spec:
   ports:
-    - port: 21
-      name: ftps
-      nodePort: 21
-    - port: 21000
-      name: ftps-data
+  - port: 21
+    protocol: TCP
+    name: ftps
+  - port: 21000
+    protocol: TCP
+    name: ftps-data
   selector:
     app: ftps
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -23,12 +24,12 @@ metadata:
     app: ftps
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ftps
@@ -38,7 +39,6 @@ spec:
   selector:
     matchLabels:
       app: ftps
-  replicas: 1
   strategy:
     type: Recreate
   template:
@@ -47,14 +47,14 @@ spec:
         app: ftps
     spec:
       containers:
-      - image: ftps_alpine
+      - name: ftps
+        image: ftps
         imagePullPolicy: Never
-        name: ftps
         env:
         - name: FTP_USER
-          value: admin
+          value: user
         - name: FTP_PASSWORD
-          value: admin
+          value: user
         ports:
         - containerPort: 21
           hostPort: 21
@@ -64,6 +64,6 @@ spec:
         - name: ftps-persistent-storage
           mountPath: /ftps
       volumes:
-      - name: ftps-persistent-storage
-        persistentVolumeClaim:
-          claimName: ftps-pv-claim
+        - name: ftps-persistent-storage
+          persistentVolumeClaim:
+            claimName: ftps-pv-claim

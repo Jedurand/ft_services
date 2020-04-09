@@ -9,7 +9,8 @@ function apply_yaml()
 	printf "✓	$@ deployed!\n"
 }
 
-SERVICE_LIST="mysql phpmyadmin nginx wordpress influxdb telegraf grafana"
+
+SERVICE_LIST="nginx influxdb grafana mysql phpmyadmin wordpress ftps telegraf"
 
 if [[ $1 = 'clean' ]]
 then
@@ -38,19 +39,31 @@ WORK_DIR=$(pwd)
 
 eval $(minikube docker-env)
 
+echo "UPDATE data_source SET url = 'http://$MINIKUBE_IP:8086'" | sqlite3 srcs/grafana/grafana.db
+echo "update user set password = '59acf18b94d7eb0694c61e60ce44c110c7a683ac6a8f09580d626f90f4a242000746579358d77dd9e570e83fa24faa88a8a6', salt = 'F3FAxVm33R' where login = 'admin'; exit" | sqlite3 srcs/grafana/grafana.db
+sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/telegraf.yaml
+
 cp srcs/wordpress/files/wordpress.sql srcs/wordpress/files/wordpress-tmp.sql
 sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/wordpress/files/wordpress-tmp.sql
-cp srcs/ftps/scripts/start.sh srcs/ftps/scripts/start-tmp.sh
-sed -i '' "s/\$ADDRESS/$MINIKUBE_IP/g" srcs/ftps/scripts/start-tmp.sh
+sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/ftps/scripts/start.sh
+#cp srcs/ftps/scripts/start.sh srcs/ftps/scripts/start-tmp.sh
+#sed -i '' "s/\$ADDRESS/$MINIKUBE_IP/g" srcs/ftps/scripts/start-tmp.sh
 
 docker build -t mysql_alpine srcs/mysql
 docker build -t wordpress_alpine srcs/wordpress
 docker build -t nginx_alpine srcs/nginx
 docker build -t phpmyadmin srcs/phpmyadmin
-docker build -t ftps_alpine srcs/ftps
-#docker build -t grafana_alpine srcs/grafana
+docker build -t ftps srcs/ftps
+docker build -t influxdb_alpine srcs/influxdb
+docker build -t telegraf_alpine srcs/telegraf
+docker build -t grafana_alpine srcs/grafana
 
 #minikube mount $WORK_DIR/srcs/grafana/grafana/config:/grafana
+
+sleep 1
+sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/telegraf.yaml
+#sed -i.bak 's/http:\/\/'"$MINIKUBE_IP"'/http:\/\/IP/g' srcs/telegraf.yaml
+sleep 1
 
 for SERVICE in $SERVICE_LIST
 do
@@ -62,5 +75,5 @@ kubectl apply -f srcs/ingress.yaml > /dev/null
 kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql -u root -e 'CREATE DATABASE wordpress;'
 kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql wordpress -u root < srcs/wordpress/files/wordpress-tmp.sql
 
-rm -rf srcs/ftps/scripts/start-tmp.sh
+#rm -rf srcs/ftps/scripts/start-tmp.sh
 rm -rf srcs/wordpress/files/wordpress-tmp.sql

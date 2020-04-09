@@ -3,7 +3,7 @@ FLAGS	= --v=7 --cpus 4 --vm-driver=virtualbox
 
 
 all:
-	echo "<make> clean_pods, start_machine, get_ip, elete, stop"	
+	echo "<make> clean_pods, start_machine, get_ip, delete, stop"	
 
 clean_pods:
 	kubectl delete --all pods --namespace=default ;
