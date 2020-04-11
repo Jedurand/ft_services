@@ -29,5 +29,7 @@ COPY scripts/start.sh start.sh
 COPY files/wp-config.php ${APACHE_SERVER_PATH}/wp-config.php
 
 EXPOSE 80
+EXPOSE 5050
 
-ENTRYPOINT [ "./start.sh" ]
+# ENTRYPOINT [ "./start.sh" ]
+CMD ./start.sh

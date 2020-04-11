@@ -12,4 +12,5 @@ VOLUME ["/var/lib/mysql"]
 
 EXPOSE 3306
 
-ENTRYPOINT ["/bin/start.sh"]
+#ENTRYPOINT ["/bin/start.sh"]
+CMD ./bin/start.sh

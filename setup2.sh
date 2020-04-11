@@ -46,24 +46,25 @@ sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/telegraf.yaml
 cp srcs/wordpress/files/wordpress.sql srcs/wordpress/files/wordpress-tmp.sql
 sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/wordpress/files/wordpress-tmp.sql
 sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/ftps/scripts/start.sh
+sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/telegraf.yaml
 #cp srcs/ftps/scripts/start.sh srcs/ftps/scripts/start-tmp.sh
 #sed -i '' "s/\$ADDRESS/$MINIKUBE_IP/g" srcs/ftps/scripts/start-tmp.sh
 
+docker build -t influxdb_alpine srcs/influxdb
 docker build -t mysql_alpine srcs/mysql
 docker build -t wordpress_alpine srcs/wordpress
 docker build -t nginx_alpine srcs/nginx
 docker build -t phpmyadmin srcs/phpmyadmin
 docker build -t ftps srcs/ftps
-docker build -t influxdb_alpine srcs/influxdb
 docker build -t telegraf_alpine srcs/telegraf
 docker build -t grafana_alpine srcs/grafana
 
 #minikube mount $WORK_DIR/srcs/grafana/grafana/config:/grafana
 
-sleep 1
-sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/telegraf.yaml
+#sleep 1
+#sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/telegraf.yaml
 #sed -i.bak 's/http:\/\/'"$MINIKUBE_IP"'/http:\/\/IP/g' srcs/telegraf.yaml
-sleep 1
+#sleep 1
 
 for SERVICE in $SERVICE_LIST
 do
