@@ -90,6 +90,7 @@ ADD ./files/php-fpm.conf /etc/php7/php-fpm.conf
 RUN chmod u+x /start.sh
 
 EXPOSE 80
+EXPOSE 5000
 VOLUME ["/data"]
 
 CMD ["/start.sh"]

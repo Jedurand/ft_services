@@ -33,7 +33,7 @@ spec:
           image: phpmyadmin
           imagePullPolicy: Never
           ports:
-            - containerPort: 80
+            - containerPort: 5000
           env:
             - name: MYSQL_HOSTNAME
               value: mysql

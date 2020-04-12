@@ -6,8 +6,8 @@ metadata:
     app: wordpress
 spec:
   ports:
-    - protocol: TCP
-      port: 80
+#    - protocol: TCP
+    - port: 80
       nodePort: 5050
       name: http
   selector:
@@ -58,8 +58,8 @@ spec:
         - name: WORDPRESS_DB_NAME
           value: wordpress
         ports:
-        - containerPort: 80
-          name: wordpress
+        - containerPort: 5050
+#          name: http
         volumeMounts:
         - name: wordpress-persistent-storage
           mountPath: /var/www/html
