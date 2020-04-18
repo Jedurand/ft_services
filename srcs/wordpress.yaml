@@ -45,7 +45,7 @@ spec:
         app: wordpress
     spec:
       containers:
-      - image: wordpress_alpine
+      - image: wordpress
         imagePullPolicy: Never
         name: wordpress
         env:

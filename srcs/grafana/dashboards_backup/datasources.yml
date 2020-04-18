@@ -1,0 +1,6 @@
+apiVersion: 1
+datasources:
+- name: telegraf
+  url: http://MINIKUBE_IP:8086
+  isDefault: true
+  database: telegraf

@@ -44,7 +44,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - image: mysql_alpine
+      - image: mysql
         imagePullPolicy: Never
         name: mysql
         env:

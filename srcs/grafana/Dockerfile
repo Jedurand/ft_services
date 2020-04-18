@@ -12,6 +12,15 @@ COPY ./defaults.ini ./grafana-6.6.0/conf/
 COPY ./grafana.db ./grafana-6.6.0/data/
 COPY ./scripts/start.sh .
 
+#RUN cat ./dashboards_backup/*.json
+#COPY ./dashboards_backup/datasources.yml ./grafana-6.6.0/conf/provisioning/datasources/
+#COPY ./dashboard.yml ./grafana-6.6.0/conf/provisioning/dashboards/
+#COPY ./dashboards_backup/*.json ./grafana-6.6.0/conf/provisioning/dashboards/
+#COPY ./dashboards_backup/*.json ./grafana-6.6.0/
+#COPY ./dashboards_backup/*.json ./
+#RUN ls ./grafana-6.6.0/conf/provisioning/dashboards/
+
+
 RUN chmod +x start.sh
 
 EXPOSE 3000

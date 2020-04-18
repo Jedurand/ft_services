@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: grafana_alpine
+        image: grafana
         ports:
         - containerPort: 3000
         imagePullPolicy: Never

@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: telegraf
-        image: telegraf_alpine
+        image: telegraf
         ports:
         - containerPort: 4999
         imagePullPolicy: Never
