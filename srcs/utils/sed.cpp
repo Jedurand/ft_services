@@ -35,8 +35,8 @@ int main(int ac, char **av)
 	std::ofstream dest(av[1]);
 	if (!dest)
 		return (0);
-	std::cout << av[2] << std::endl << av[3] << std::endl << len <<
-	std::endl;
+//	std::cout << av[2] << std::endl << av[3] << std::endl << len <<
+//	std::endl;
 	while (i < content.size())
 	{
 		i = content.find(av[2], i);

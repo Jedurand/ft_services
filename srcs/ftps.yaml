@@ -52,9 +52,9 @@ spec:
         imagePullPolicy: Never
         env:
         - name: FTP_USER
-          value: user
+          value: admin
         - name: FTP_PASSWORD
-          value: user
+          value: admin
         ports:
         - containerPort: 21
           hostPort: 21

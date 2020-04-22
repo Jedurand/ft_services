@@ -31,6 +31,7 @@ then
 		minikube start --cpus=2 --memory 4000 --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=1-35000
 	elif [[ "$OSTYPE" == "linux"* ]]
 	then
+#		Run the below file if not installed yet on your vm
 #		bash srcs/utils/pastebin.sh
 		minikube start --cpus=2 --memory 4000 --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
 	fi
@@ -46,8 +47,11 @@ WORK_DIR=$(pwd)
 
 eval $(minikube docker-env)
 
+# Set up already built database, the reset user/pass is for safety as it is sometimes required
 echo "UPDATE data_source SET url = 'http://$MINIKUBE_IP:8086'" | sqlite3 srcs/grafana/grafana.db
 echo "update user set password = '59acf18b94d7eb0694c61e60ce44c110c7a683ac6a8f09580d626f90f4a242000746579358d77dd9e570e83fa24faa88a8a6', salt = 'F3FAxVm33R' where login = 'admin'; exit" | sqlite3 srcs/grafana/grafana.db
+
+# SED command is bad for portability
 
 clang++ -o sed_maison srcs/utils/sed.cpp
 
@@ -92,4 +96,22 @@ kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql wordpr
 
 rm sed_maison
 
+echo ""
+echo "---"
+echo "IP: $MINIKUBE_IP"
+echo ""
+echo "Logins:"
+echo "wp: admin/admin user1/admin ..."
+echo "php: root/password"
+echo "grafana: admin/admin"
+echo "ftps: admin/admin"
+echo ""
+echo "SERVICES:"
+echo "ssh: 4000"
+echo "wp: 5050"
+echo "php: 5000"
+echo "grafana: 3000"
+echo ""
+echo "---> ssh admin@$(minikube ip) -p 4000 "
 #to connect to nginx wirth ssh: ssh admin@$(minikube ip) -p 4000
+#ftp $(minikube ip)
