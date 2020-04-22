@@ -44,7 +44,7 @@ spec:
             value: telegraf
           - name: INFLUX_URL
             value: "http://MINIKUBE_IP"
-            - name: INFLUX_SKIP_DATABASE_CREATION
+          - name: INFLUX_SKIP_DATABASE_CREATION
             value: "false"
           - name: INFLUX_PASSWORD
             value: "services"
