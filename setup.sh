@@ -31,7 +31,7 @@ then
 		minikube start --cpus=2 --memory 4000 --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=1-35000
 	elif [[ "$OSTYPE" == "linux"* ]]
 	then
-#		bash ./pastebin.sh
+		bash ./pastebin.sh
 		minikube start --cpus=2 --memory 4000 --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
 	fi
 	minikube addons enable metrics-server
@@ -49,14 +49,16 @@ eval $(minikube docker-env)
 echo "UPDATE data_source SET url = 'http://$MINIKUBE_IP:8086'" | sqlite3 srcs/grafana/grafana.db
 echo "update user set password = '59acf18b94d7eb0694c61e60ce44c110c7a683ac6a8f09580d626f90f4a242000746579358d77dd9e570e83fa24faa88a8a6', salt = 'F3FAxVm33R' where login = 'admin'; exit" | sqlite3 srcs/grafana/grafana.db
 
+clang++ -o sed_maison srcs/utils/sed.cpp
+
 #sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/telegraf.yaml
 #sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/wordpress/files/wordpress.sql
 #sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g"srcs/ftps/scraipts/start.sh
 #sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g"srcs/grafana/dashboards_backup/datasources.yml
-./srcs/sed_maison srcs/telegraf.yaml "MINIKUBE_IP" "$MINIKUBE_IP"
-./srcs/sed_maison srcs/wordpress/files/wordpress.sql "MINIKUBE_IP" "$MINIKUBE_IP"
-./srcs/sed_maison srcs/ftps/scipts/start.sh "MINIKUBE_IP" "$MINIKUBE_IP"
-./srcs/sed_maison srcs/grafana/dashboards_backup/datasources.yml "MINIKUBE_IP" "$MINIKUBE_IP"
+./sed_maison srcs/telegraf.yaml "MINIKUBE_IP" "$MINIKUBE_IP"
+./sed_maison srcs/wordpress/files/wordpress.sql "MINIKUBE_IP" "$MINIKUBE_IP"
+./sed_maison srcs/ftps/scripts/start.sh "MINIKUBE_IP" "$MINIKUBE_IP"
+./sed_maison srcs/grafana/dashboards_backup/datasources.yml "MINIKUBE_IP" "$MINIKUBE_IP"
 
 
 docker build -t influxdb srcs/influxdb
@@ -83,7 +85,11 @@ kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql wordpr
 #sed -i '' "s/$MINIKUBE_IP/MINIKUBE_IP/g" srcs/wordpress/files/wordpress.sql
 #sed -i '' "s/$MINIKUBE_IP/MINIKUBE_IP/g"srcs/ftps/scripts/start.sh
 #sed -i '' "s/$MINIKUBE_IP/MINIKUBE_IP/g"srcs/grafana/dashboards_backup/datasources.yml
-./srcs/sed_maison srcs/telegraf.yaml "$MINIKUBE_IP" "MINIKUBE_IP"
-./srcs/sed_maison srcs/ftps/scripts/start.sh "$MINIKUBE_IP" "MINIKUBE_IP"
-./srcs/sed_maison srcs/wordpress/files/wordpress.sql "$MINIKUBE_IP" "MINIKUBE_IP"
-./srcs/sed_maison srcs/grafana/dashboards_backup/datasources.yml "$MINIKUBE_IP" "MINIKUBE_IP"
+./sed_maison srcs/telegraf.yaml "$MINIKUBE_IP" "MINIKUBE_IP"
+./sed_maison srcs/ftps/scripts/start.sh "$MINIKUBE_IP" "MINIKUBE_IP"
+./sed_maison srcs/wordpress/files/wordpress.sql "$MINIKUBE_IP" "MINIKUBE_IP"
+./sed_maison srcs/grafana/dashboards_backup/datasources.yml "$MINIKUBE_IP" "MINIKUBE_IP"
+
+rm sed_maison
+
+#to connect to nginx wirth ssh: ssh admin@$(minikube ip) -p 4000
