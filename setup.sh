@@ -31,7 +31,7 @@ then
 		minikube start --cpus=2 --memory 4000 --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=1-35000
 	elif [[ "$OSTYPE" == "linux"* ]]
 	then
-		bash srcs/utils/pastebin.sh
+#		bash srcs/utils/pastebin.sh
 		minikube start --cpus=2 --memory 4000 --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
 	fi
 	minikube addons enable metrics-server
