@@ -24,6 +24,16 @@ then
 	exit
 fi
 
+if [[ "$OSTYPE" == "linux"* ]]
+then
+	sudo chmod 666 /var/run/docker.sock <<< user42
+fi
+
+if [[ "$OSTYPE" == "linux"* ]]
+then
+	bash srcs/utils/pastebin.sh
+fi
+
 if [[ $(minikube status | grep -c "Running") == 0 ]]
 then
 	if [[ "$OSTYPE" == "darwin"* ]]
@@ -31,9 +41,6 @@ then
 		minikube start --cpus=2 --memory 4000 --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=1-35000
 	elif [[ "$OSTYPE" == "linux"* ]]
 	then
-#		Run the below file if not installed yet on your vm
-#		bash srcs/utils/pastebin.sh
-		sudo chmod 666 /var/run/docker.sock <<< user42
 		minikube start --cpus=2 --memory 4000 --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
 	fi
 	minikube addons enable metrics-server
