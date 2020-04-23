@@ -33,6 +33,7 @@ then
 	then
 #		Run the below file if not installed yet on your vm
 #		bash srcs/utils/pastebin.sh
+		sudo chmod 666 /var/run/docker.sock <<< user42
 		minikube start --cpus=2 --memory 4000 --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
 	fi
 	minikube addons enable metrics-server
