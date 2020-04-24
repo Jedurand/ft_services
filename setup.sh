@@ -9,7 +9,6 @@ function apply_yaml()
 	printf "Successfully deployed $@\n"
 }
 
-
 SERVICE_LIST="nginx influxdb grafana mysql phpmyadmin wordpress ftps telegraf"
 
 if [[ $1 = 'clean' ]]
@@ -57,7 +56,14 @@ WORK_DIR=$(pwd)
 eval $(minikube docker-env)
 
 # Set up already built database, the reset user/pass is for safety as it is sometimes required
-echo "UPDATE data_source SET url = 'http://$MINIKUBE_IP:8086'" | sqlite3 srcs/grafana/grafana.db
+if [[ "$OSTYPE" == "darwin"* ]]
+then
+	echo "UPDATE data_source SET url = 'http://$MINIKUBE_IP:8086'" | sqlite3 srcs/grafana/grafana.db
+elif [[ "$OSTYPE" == "linux"* ]]
+then
+	echo "UPDATE data_source SET url = 'http://$VM_IP:8086'" | sqlite3 srcs/grafana/grafana.db
+fi
+
 echo "update user set password = '59acf18b94d7eb0694c61e60ce44c110c7a683ac6a8f09580d626f90f4a242000746579358d77dd9e570e83fa24faa88a8a6', salt = 'F3FAxVm33R' where login = 'admin'; exit" | sqlite3 srcs/grafana/grafana.db
 
 # SED command is bad for portability
@@ -149,6 +155,15 @@ echo "wp: 5050"
 echo "php: 5000"
 echo "grafana: 3000"
 echo ""
-echo "---> ssh admin@$(minikube ip) -p 4000 "
+
+if [[ "$OSTYPE" == "darwin"* ]]
+then
+	echo "---> ssh admin@$(minikube ip) -p 4000 "
+elif [[ "$OSTYPE" == "linux"* ]]
+then
+	echo "---> ssh admin@$VM_IP -p 4000 "
+fi
+
+
 #to connect to nginx wirth ssh: ssh admin@$(minikube ip) -p 4000
 #ftp $(minikube ip)
