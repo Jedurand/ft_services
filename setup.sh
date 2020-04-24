@@ -29,10 +29,10 @@ then
 	sudo chmod 666 /var/run/docker.sock <<< user42
 fi
 
-if [[ "$OSTYPE" == "linux"* ]]
-then
-	bash srcs/utils/pastebin.sh
-fi
+#if [[ "$OSTYPE" == "linux"* ]]
+#then
+#	bash srcs/utils/pastebin.sh
+#fi
 
 if [[ $(minikube status | grep -c "Running") == 0 ]]
 then
@@ -49,6 +49,7 @@ then
 fi
 
 MINIKUBE_IP=$(minikube ip)
+VM_IP="172.17.0.2"
 WORK_DIR=$(pwd)
 
 # Set the docker images in Minikube
@@ -67,10 +68,19 @@ clang++ -o sed_maison srcs/utils/sed.cpp
 #sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g" srcs/wordpress/files/wordpress.sql
 #sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g"srcs/ftps/scraipts/start.sh
 #sed -i '' "s/MINIKUBE_IP/$MINIKUBE_IP/g"srcs/grafana/dashboards_backup/datasources.yml
-./sed_maison srcs/telegraf.yaml "MINIKUBE_IP" "$MINIKUBE_IP"
-./sed_maison srcs/wordpress/files/wordpress.sql "MINIKUBE_IP" "$MINIKUBE_IP"
-./sed_maison srcs/ftps/scripts/start.sh "MINIKUBE_IP" "$MINIKUBE_IP"
-./sed_maison srcs/grafana/dashboards_backup/datasources.yml "MINIKUBE_IP" "$MINIKUBE_IP"
+if [[ "$OSTYPE" == "darwin"* ]]
+then
+	./sed_maison srcs/telegraf.yaml "MINIKUBE_IP" "$MINIKUBE_IP"
+	./sed_maison srcs/wordpress/files/wordpress.sql "MINIKUBE_IP" "$MINIKUBE_IP"
+	./sed_maison srcs/ftps/scripts/start.sh "MINIKUBE_IP" "$MINIKUBE_IP"
+	./sed_maison srcs/grafana/dashboards_backup/datasources.yml "MINIKUBE_IP" "$MINIKUBE_IP"
+elif [[ "$OSTYPE" == "linux"* ]]
+then
+	./sed_maison srcs/telegraf.yaml "MINIKUBE_IP" "$VM_IP"
+	./sed_maison srcs/wordpress/files/wordpress.sql "MINIKUBE_IP" "$VM_IP"
+	./sed_maison srcs/ftps/scripts/start.sh "MINIKUBE_IP" "$VM_IP"
+	./sed_maison srcs/grafana/dashboards_backup/datasources.yml "MINIKUBE_IP" "$VM_IP"
+fi
 
 
 docker build -t influxdb srcs/influxdb
@@ -97,16 +107,35 @@ kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql wordpr
 #sed -i '' "s/$MINIKUBE_IP/MINIKUBE_IP/g" srcs/wordpress/files/wordpress.sql
 #sed -i '' "s/$MINIKUBE_IP/MINIKUBE_IP/g"srcs/ftps/scripts/start.sh
 #sed -i '' "s/$MINIKUBE_IP/MINIKUBE_IP/g"srcs/grafana/dashboards_backup/datasources.yml
-./sed_maison srcs/telegraf.yaml "$MINIKUBE_IP" "MINIKUBE_IP"
-./sed_maison srcs/ftps/scripts/start.sh "$MINIKUBE_IP" "MINIKUBE_IP"
-./sed_maison srcs/wordpress/files/wordpress.sql "$MINIKUBE_IP" "MINIKUBE_IP"
-./sed_maison srcs/grafana/dashboards_backup/datasources.yml "$MINIKUBE_IP" "MINIKUBE_IP"
+
+if [[ "$OSTYPE" == "darwin"* ]]
+then
+	./sed_maison srcs/telegraf.yaml "$MINIKUBE_IP" "MINIKUBE_IP"
+	./sed_maison srcs/ftps/scripts/start.sh "$MINIKUBE_IP" "MINIKUBE_IP"
+	./sed_maison srcs/wordpress/files/wordpress.sql "$MINIKUBE_IP" "MINIKUBE_IP"
+	./sed_maison srcs/grafana/dashboards_backup/datasources.yml "$MINIKUBE_IP" "MINIKUBE_IP"
+elif [[ "$OSTYPE" == "linux"* ]]
+then
+	./sed_maison srcs/telegraf.yaml "$VM_IP" "MINIKUBE_IP"
+	./sed_maison srcs/ftps/scripts/start.sh "$VM_IP" "MINIKUBE_IP"
+	./sed_maison srcs/wordpress/files/wordpress.sql "$VM_IP" "MINIKUBE_IP"
+	./sed_maison srcs/grafana/dashboards_backup/datasources.yml "$VM_IP" "MINIKUBE_IP"
+fi
+
 
 rm sed_maison
 
 echo ""
 echo "---"
-echo "IP: $MINIKUBE_IP"
+
+if [[ "$OSTYPE" == "darwin"* ]]
+then
+	echo "IP: $MINIKUBE_IP"
+elif [[ "$OSTYPE" == "linux"* ]]
+then
+	echo "IP: $VM_IP"
+fi
+
 echo ""
 echo "Logins:"
 echo "wp: admin/admin user1/admin ..."
